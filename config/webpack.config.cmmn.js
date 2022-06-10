@@ -6,35 +6,39 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CLEAN_WEBPACK_PLUGIN = CleanWebpackPlugin;
 
 module.exports = {
-    mode: "development",
-    entry: "./src/core/index.js",
+    entry: "./src/core/index.tsx",
     output: {
         filename: "[name].[chunkhash].js",
         path: PATH.resolve(__dirname, "dist/js"),
     },
+    resolve: {
+        extensions: [".ts", ".tsx", ".js"],
+        alias: {
+            "@": PATH.resolve(__dirname, "../src/"),
+        },
+    },
     module: {
         rules: [
             {
-                test: /\.js$/,
+                //test: /\.js$/,
+                test: /\.(ts|tsx)$/,
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: ["@babel/preset-env", "@babel/preset-react"],
+                        // @babel/preset-typescript가 없으면 .tsx 변환 X
+                        presets: ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
                     }
                 },
             },
         ]
     },
     plugins: [
-        new CLEAN_WEBPACK_PLUGIN(),
+        new CLEAN_WEBPACK_PLUGIN({
+            cleanStaleWebpackAssets: false,
+        }),
         new HTML_WEBPACK_PLUGIN({
             template: "./src/template/index.html",
         }),
     ],
-    devtool: "eval-cheap-source-map",
-    devServer: {
-        port: 9000,
-        hot: true,
-    }
 }
