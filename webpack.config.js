@@ -3,6 +3,7 @@ const PATH = require("path");
 
 const HTML_WEBPACK_PLUGIN = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CLEAN_WEBPACK_PLUGIN = CleanWebpackPlugin;
 
 module.exports = {
     mode: "development",
@@ -15,7 +16,7 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                exclude: /node_module/,
+                exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
                     options: {
@@ -26,7 +27,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin(),
+        new CLEAN_WEBPACK_PLUGIN(),
         new HTML_WEBPACK_PLUGIN({
             template: "./src/template/index.html",
         }),
